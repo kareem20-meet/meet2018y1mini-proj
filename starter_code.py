@@ -18,7 +18,7 @@ turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window
 turtle.penup()
 
 SQUARE_SIZE = 20
-START_LENGTH = 6
+START_LENGTH = 5
 
 #Initialize lists
 pos_list = []
@@ -34,26 +34,25 @@ snake.shape("square")
 turtle.hideturtle()
 
 #Draw a snake at the start of the game with a for loop
-for loop should use range() and count up to the number of pieces
-in the snake (i.e. START_LENGTH)
-for ______  in __________ :
-    x_pos=snake._____________ #Get x-position with snake.pos()[0]
-    y_pos=snake._____________ 
-
+#for loop should use range() and count up to the number of pieces
+#in the snake (i.e. START_LENGTH)
+for number  in range(START_LENGTH) :
+    x_pos=snake.pos()[0] #Get x-position with snake.pos()[0]
+    y_pos=snake.pos()[1]
+    
     #Add SQUARE_SIZE to x_pos. Where does x_pos point to now?    
     # You're RIGHT!
-    x_pos+=__________ 
-
+    x_pos+= SQUARE_SIZE
+    
     my_pos=(x_pos,y_pos) #Store position variables in a tuple
-    snake.goto(____________,____________) #Move snake to new (x,y)
-   
+    snake.goto(x_pos, y_pos) #Move snake to new (x,y)
     #Append the new position tuple to pos_list
-    ______.append(_____________) 
+    pos_list.append(my_pos) 
 
     #Save the stamp ID! You'll need to erase it later. Then append
     # it to stamp_list.             
-    _____________ = snake.stamp()
-    ______.append(_____________)
+    stamp = snake.stamp()
+    stamp_list.append(stamp)
 
 
 ###############################################################
@@ -69,6 +68,10 @@ TIME_STEP = 100 #Update snake position after this many
 SPACEBAR = "space" # Careful, it's not supposed to be capitalized!
 
 UP = 0
+DOWN = 1
+LEFT = 2
+RIGHT = 3
+
 #1. Make variables LEFT, DOWN, and RIGHT with values 1, 2, and 3
 ####WRITE YOUR CODE HERE!!
 
@@ -82,11 +85,35 @@ def up():
 
 #2. Make functions down(), left(), and right() that change direction
 ####WRITE YOUR CODE HERE!!
+  
+    
+def down():
+    global direction
+    direction = DOWN
+    move_snake()
+    print("you pressed the down key")
 
-turtle.onkeypress(up, UP_ARROW) # Create listener for up key
 
+def left():
+    global direction
+    direction = LEFT
+    move_snake()
+    print("you pressed the down key")
+    
+
+def right():
+    global direction
+    direction = RIGHT
+    move_snake()
+    print("you pressed the down key")
+        
+turtle.onkeypress(up, UP_ARROW)# Create listener for up key
+turtle.onkeypress(left, LEFT_ARROW)
+turtle.onkeypress(right, RIGHT_ARROW)
+turtle.onkeypress(down, DOWN_ARROW)
 #3. Do the same for the other arrow keys
 ####WRITE YOUR CODE HERE!!
+
 
 turtle.listen()
 
@@ -101,7 +128,13 @@ def move_snake():
     elif direction==LEFT:
         snake.goto(x_pos - SQUARE_SIZE, y_pos)
         print("You moved left!")
-
+    elif direction==UP:
+        snake.goto(x_pos, y_pos +  SQUARE_SIZE )
+        print("You moved left!")
+    elif direction==DOWN:
+        snake.goto(x_pos, y_pos - SQUARE_SIZE )
+        print("You moved left!")
+   
     #4. Write the conditions for UP and DOWN on your own
     ##### YOUR CODE HERE
 
