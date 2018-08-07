@@ -77,10 +77,15 @@ RIGHT = 3
 
 direction = UP
 
+TOP_EDGE = 250
+BOTTOM_EDGE = -250
+RIGHT_EDGE = 400
+LEFT_EDGE = -400
+
+
 def up():
     global direction #snake direction is global (same everywhere)
-    direction=UP #Change direction to up
-    move_snake() #Update the snake drawing <- remember me later
+    direction=UP #Change direction to up    #Update the snake drawing <- remember me later
     print("You pressed the up key!")
 
 #2. Make functions down(), left(), and right() that change direction
@@ -90,21 +95,18 @@ def up():
 def down():
     global direction
     direction = DOWN
-    move_snake()
     print("you pressed the down key")
 
 
 def left():
     global direction
     direction = LEFT
-    move_snake()
     print("you pressed the down key")
     
 
 def right():
     global direction
     direction = RIGHT
-    move_snake()
     print("you pressed the down key")
         
 turtle.onkeypress(up, UP_ARROW)# Create listener for up key
@@ -121,6 +123,13 @@ def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
+    new_pos = snake.pos()
+    new_x_pos = new_pos[0]
+    new_y_pos = new_pos[1]
+    turtle.ontimer(move_snake,TIME_STEP)
+
+     #4. Write the conditions for UP and DOWN on your own
+    ##### YOUR CODE HERE
     
     if direction==RIGHT:
         snake.goto(x_pos + SQUARE_SIZE, y_pos)
@@ -134,9 +143,41 @@ def move_snake():
     elif direction==DOWN:
         snake.goto(x_pos, y_pos - SQUARE_SIZE )
         print("You moved left!")
-   
-    #4. Write the conditions for UP and DOWN on your own
-    ##### YOUR CODE HERE
+    if new_x_pos >= RIGHT_EDGE:
+        print("You hit the right edge! Game over!")
+        quit()
+    elif new_x_pos <= LEFT_EDGE:
+        print("You hit the left edge! Game over!")
+        quit()
+    elif new_y_pos <= BOTTOM_EDGE:
+        print("You hit the bottom edge! Game over!")
+        quit()
+    elif new_y_pos >= TOP_EDGE:
+        print("You hit the upper edge! Game over!")
+        quit()
+    ######## SPECIAL PLACE - Remember it for Part 5
+    global food_stamps, food_pos
+    #If snake is on top of food item
+    if snake.pos() in food_pos:
+        food_ind=food_pos.index(snake.pos()) #What does this do?
+        food.clearstamp(food_stamps[food_ind]) #Remove eaten food                 
+                                               #stamp
+        food_pos.pop(food_ind) #Remove eaten food position
+        food_stamps.pop(food_ind) #Remove eaten food stamp
+        print("You have eaten the food!")
+    
+    #HINT: This if statement may be useful for Part 8
+
+    ...
+    #Don't change the rest of the code in move_snake() function:
+    #If you have included the timer so the snake moves 
+    #automatically, the function should finish as before with a 
+    #call to ontimer()
+    turtle.ontimer(move_snake,TIME_STEP) #<--Last line of function
+
+
+
+
 
     #Stamp new element and append new stamp in list
     #Remember: The snake position changed - update my_pos()
@@ -151,7 +192,30 @@ def move_snake():
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
     pos_list.pop(0)
+move_snake()
 
+turtle.register_shape("trash.gif") #Add trash picture
+                      # Make sure you have downloaded this shape 
+                      # from the Google Drive folder and saved it
+                      # in the same folder as this Python script
 
+food = turtle.clone()
 
+food.shape("trash.gif") 
 
+#Locations of food
+food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+food_stamps = []
+
+# Write code that:
+#1. moves the food turtle to each food position
+#2. stamps the food turtle at that location
+#3. saves the stamp by appending it to the food_stamps list using
+# food_stamps.append(    )
+#4. Don’t forget to hide the food turtle!
+for this_food_pos in food_pos :
+    ####WRITE YOUR CODE HERE!S
+    food.goto(this_food_pos)
+    food.stamp()
+    stamp1 = food.stamp()
+    food_stamps.append(stamp1)
